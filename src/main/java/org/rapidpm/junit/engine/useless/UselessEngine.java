@@ -17,7 +17,7 @@ public class UselessEngine implements TestEngine, HasLogger {
     EngineDescriptor rootNode = new EngineDescriptor(engineID, "The UselessEngine");
 
     //will come from somewhere
-    UselessEngineTestDescriptor test001 = new UselessEngineTestDescriptor(engineID, "test001");
+    UselessEngineTestDescriptor test001 = new UselessEngineTestDescriptor(engineID, "useless test001");
     rootNode.addChild(test001);
     return rootNode;
   }
