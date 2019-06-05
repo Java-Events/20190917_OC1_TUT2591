@@ -1,5 +1,6 @@
 package org.rapidpm.junit.engine.nano;
 
+import org.junit.platform.commons.support.AnnotationSupport;
 import org.junit.platform.commons.util.ReflectionUtils;
 import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.support.descriptor.AbstractTestDescriptor;
@@ -32,15 +33,15 @@ public class NanoEngineClassTestDescriptor
       if (ReflectionUtils.isPrivate(method)) return false;
       if (ReflectionUtils.isAbstract(method)) return false;
       if (method.getParameterCount() > 0) return false;
-      return method.getReturnType()
-                   .equals(void.class);
+      return AnnotationSupport.isAnnotated(method, NanoTest.class)
+             && method.getReturnType().equals(void.class);
     };
 
     ReflectionUtils.findMethods(testClass, isTestMethod)
                    .stream()
+                   .peek((e) -> logger().info("method in class -> " + e.getName()))
                    .map(method -> new NanoEngineMethodTestDescriptor(method, testClass, this))
                    .forEach(this::addChild);
-
   }
 
 

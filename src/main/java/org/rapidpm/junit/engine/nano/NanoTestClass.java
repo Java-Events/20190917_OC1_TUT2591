@@ -1,11 +1,14 @@
 package org.rapidpm.junit.engine.nano;
 
+
 import org.junit.platform.commons.annotation.Testable;
 
 import java.lang.annotation.*;
 
-@Target({ElementType.METHOD})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Testable //for IDE support
-public @interface NanoTest { }
+@Testable
+public @interface NanoTestClass {
+//params
+}
