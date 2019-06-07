@@ -12,7 +12,6 @@ Show what happened with an Annotation including @Testable
 IDE Support without EngineSupport
 Split Annotations on Class- Method-Level
 
-
 ### NanoEngine-discover
 * MethodSelector
 * ClassSelector
@@ -21,8 +20,36 @@ Split Annotations on Class- Method-Level
  Show how this is done step by step in the IDE and compared to maven::test
  
 
+## Micro Engine
+Holding Resources
+
+
+## ClassLoaders
+
+-Djava.system.class.loader=org.rapidpm.junit.engine.distributed.shared.HZClassLoader
+
+
+
+
+
+
 
 ## Name is missing
+
+
+## Was kann ich mit einer Engine machen?
+Die Art wie ein Test beschrieben wird verändern
+Resourcen verwalten, DB, ServletContainer, HZ Cluster...
+LizenzManagement
+Testausführung parallelisieren, async gestallten, ..
+Dashboard über Metriken
+
+Distributed TestEngine
+Test definition ist KlaSSENNAME UND METHODEN NAME
+HZClassLoader läd die Klasse und invoke method
+wenn Klasse geladen werden muss
+
+
 
 ## Ideas
 manage resource like ServletContainer

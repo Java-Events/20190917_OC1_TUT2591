@@ -3,9 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <packaging>pom</packaging>
+  <modules>
+    <module>01-useless</module>
+    <module>02-nanoengine</module>
+    <module>03-microengine</module>
+    <module>04-distributed-engine</module>
+  </modules>
 
 
-<parent>
+  <parent>
   <groupId>org.rapidpm</groupId>
   <artifactId>rapidpm-dependencies</artifactId>
   <version>04.00.17-RPM</version>
@@ -40,7 +47,6 @@
       <version>${junit.platform.version}</version>
       <scope>compile</scope>
     </dependency>
-
 
 
   </dependencies>
