@@ -10,11 +10,20 @@ import org.rapidpm.dependencies.core.logger.HasLogger;
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
+import static java.util.Collections.shuffle;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
+
 public class MicroEngineClassTestDescriptor
     extends AbstractTestDescriptor
     implements HasLogger {
 
   private final Class<?> testClass;
+
+  private Boolean forceRandomExecution = false;
+  private Boolean useCDI               = false;
+
 
   public MicroEngineClassTestDescriptor(Class<?> testClass, TestDescriptor parent) {
     super(parent.getUniqueId()
@@ -26,22 +35,37 @@ public class MicroEngineClassTestDescriptor
     addChildren();
   }
 
-  private void addChildren() {
 
-    Predicate<Method> isTestMethod = method -> {
+  private Predicate<Method> isTestMethod() {
+    return method -> {
       if (ReflectionUtils.isStatic(method)) return false;
       if (ReflectionUtils.isPrivate(method)) return false;
       if (ReflectionUtils.isAbstract(method)) return false;
       if (method.getParameterCount() > 0) return false;
-      return AnnotationSupport.isAnnotated(method, MicroTest.class)
-             && method.getReturnType().equals(void.class);
+      return AnnotationSupport.isAnnotated(method, MicroTest.class) && method.getReturnType()
+                                                                             .equals(void.class);
     };
+  }
 
-    ReflectionUtils.findMethods(testClass, isTestMethod)
+  private void addChildren() {
+
+    findAnnotation(testClass, MicroTestClass.class).ifPresent(a -> {
+      forceRandomExecution = a.forceRandomExecution();
+      useCDI               = a.useCDI();
+    });
+
+
+    //TODO forceRandomExecution if needed
+    ReflectionUtils.findMethods(testClass, isTestMethod())
                    .stream()
+                   .collect(collectingAndThen(toList(), elements -> {
+                     if (forceRandomExecution) shuffle(elements);
+                     return elements.stream();
+                   }))
                    .peek((e) -> logger().info("method in class -> " + e.getName()))
                    .map(method -> new MicroEngineMethodTestDescriptor(method, testClass, this))
                    .forEach(this::addChild);
+
   }
 
 

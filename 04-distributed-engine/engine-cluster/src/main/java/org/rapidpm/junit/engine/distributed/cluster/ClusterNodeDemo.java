@@ -7,6 +7,8 @@ import com.hazelcast.core.IMap;
 
 public class ClusterNodeDemo {
 
+  private ClusterNodeDemo() {
+  }
 
   public static IMap<String, byte[]> mapOfClasses;
 

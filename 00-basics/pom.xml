@@ -9,21 +9,20 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>2019-oc1-tut2591-03-microengine</artifactId>
-
+  <artifactId>2019-oc1-tut2591-00-basics</artifactId>
 
   <dependencies>
 <!--    <dependency>-->
-<!--      <groupId>javax.enterprise</groupId>-->
-<!--      <artifactId>cdi-api</artifactId>-->
-<!--      <version>2.0.SP1</version>-->
-<!--      <scope>provided</scope>-->
+<!--      <groupId>org.junit.platform</groupId>-->
+<!--      <artifactId>junit-platform-launcher</artifactId>-->
+<!--      <version>1.5.1</version>-->
+<!--      <scope>test</scope>-->
 <!--    </dependency>-->
-
     <dependency>
-      <groupId>org.jboss.weld.se</groupId>
-      <artifactId>weld-se-shaded</artifactId>
-      <version>3.1.1.Final</version>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-testkit</artifactId>
+      <version>${junit.platform.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

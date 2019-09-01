@@ -5,21 +5,28 @@ import org.junit.platform.engine.support.descriptor.MethodSource;
 
 import java.lang.reflect.Method;
 
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
+
 public class MicroEngineMethodTestDescriptor
     extends AbstractTestDescriptor {
 
   private final Method testMethod;
-  private final Class testClass;
+  private final Class  testClass;
 
-  public MicroEngineMethodTestDescriptor(Method testMethod,
-                                         Class testClass,
-                                         MicroEngineClassTestDescriptor parent) {
-    super(parent.getUniqueId().append("method", testMethod.getName()),
-          testMethod.getName(),
-          MethodSource.from(testMethod));
+  private Boolean forceRandomExecution = false;
+  private Boolean useCDI               = false;
+
+  public MicroEngineMethodTestDescriptor(Method testMethod, Class testClass, MicroEngineClassTestDescriptor parent) {
+    super(parent.getUniqueId()
+                .append("method", testMethod.getName()), testMethod.getName(), MethodSource.from(testMethod));
 
     this.testMethod = testMethod;
     this.testClass  = testClass;
+
+    findAnnotation(testClass, MicroTestClass.class).ifPresent(a -> {
+      forceRandomExecution = a.forceRandomExecution();
+      useCDI               = a.useCDI();
+    });
   }
 
   @Override
@@ -33,5 +40,13 @@ public class MicroEngineMethodTestDescriptor
 
   public Class getTestClass() {
     return testClass;
+  }
+
+  public boolean useCDI() {
+    return useCDI;
+  }
+
+  public Boolean getForceRandomExecution() {
+    return forceRandomExecution;
   }
 }

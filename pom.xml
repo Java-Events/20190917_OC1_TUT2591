@@ -4,25 +4,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <packaging>pom</packaging>
-  <modules>
-    <module>01-useless</module>
-    <module>02-nanoengine</module>
-    <module>03-microengine</module>
-    <module>04-distributed-engine</module>
-  </modules>
-
 
   <parent>
-  <groupId>org.rapidpm</groupId>
-  <artifactId>rapidpm-dependencies</artifactId>
-  <version>04.00.17-RPM</version>
-</parent>
-
+    <groupId>org.rapidpm</groupId>
+    <artifactId>rapidpm-dependencies</artifactId>
+    <version>04.01.10-RPM</version>
+  </parent>
 
   <groupId>org.rapidpm.event</groupId>
   <artifactId>2019-oc1-tut2591</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <modules>
+    <module>00-basics</module>
+    <module>01-useless</module>
+    <module>02-nanoengine</module>
+    <module>03-microengine</module>
+    <module>04-milliengine</module>
+
+    <module>04-distributed-engine</module>
+  </modules>
 
 
   <dependencies>
@@ -40,14 +41,13 @@
       <scope>compile</scope>
     </dependency>
 
-<!--    needed for writing integration tests-->
+    <!--    needed for writing integration tests-->
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
       <version>${junit.platform.version}</version>
       <scope>compile</scope>
     </dependency>
-
 
   </dependencies>
 

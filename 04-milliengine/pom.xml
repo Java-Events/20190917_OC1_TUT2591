@@ -9,17 +9,10 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>2019-oc1-tut2591-03-microengine</artifactId>
+  <artifactId>2019-oc1-tut2591-04-milliengine</artifactId>
 
 
   <dependencies>
-<!--    <dependency>-->
-<!--      <groupId>javax.enterprise</groupId>-->
-<!--      <artifactId>cdi-api</artifactId>-->
-<!--      <version>2.0.SP1</version>-->
-<!--      <scope>provided</scope>-->
-<!--    </dependency>-->
-
     <dependency>
       <groupId>org.jboss.weld.se</groupId>
       <artifactId>weld-se-shaded</artifactId>

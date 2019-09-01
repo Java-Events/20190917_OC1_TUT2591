@@ -2,6 +2,7 @@ package org.rapidpm.junit.engine.distributed.engine;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
+import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import org.junit.platform.commons.support.ReflectionSupport;
@@ -26,6 +27,7 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.function.Predicate;
 
+import static java.util.Arrays.asList;
 import static org.junit.platform.commons.support.AnnotationSupport.isAnnotated;
 import static org.junit.platform.commons.util.ReflectionUtils.isAbstract;
 import static org.junit.platform.commons.util.ReflectionUtils.isPrivate;
@@ -89,7 +91,10 @@ public class DistributedEngine
 
   //  private Config               cfg               = new Config();
 //  private HazelcastInstance    hazelcastInstance = Hazelcast.newHazelcastInstance(cfg);
-  ClientConfig      clientConfig      = new ClientConfig();
+  //TODO IP´s via properties
+
+  ClientConfig      clientConfig      = new ClientConfig().setNetworkConfig(
+      new ClientNetworkConfig().setAddresses(asList("192.168.1.8")));
   HazelcastInstance hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
   private IMap<String, byte[]> mapOfClasses = hazelcastInstance.getMap("mapOfClasses");
 

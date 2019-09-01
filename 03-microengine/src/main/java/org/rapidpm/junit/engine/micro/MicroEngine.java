@@ -1,5 +1,7 @@
 package org.rapidpm.junit.engine.micro;
 
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.platform.commons.support.ReflectionSupport;
 import org.junit.platform.commons.util.ReflectionUtils;
 import org.junit.platform.engine.*;
@@ -26,6 +28,8 @@ public class MicroEngine
     implements TestEngine, HasLogger {
 
   public static final String ENGINE_ID = MicroEngine.class.getSimpleName();
+
+  private final Weld weld = new Weld();
 
   @Override
   public String getId() {
@@ -54,8 +58,8 @@ public class MicroEngine
     request.getSelectorsByType(ClasspathRootSelector.class)
            .forEach(selector -> {
              URI classpathRoot = selector.getClasspathRoot();
-             ReflectionUtils.findAllClassesInClasspathRoot(classpathRoot, checkClass(), (name)->true)
-             .forEach(clazz -> appendTestInClass(clazz, rootNode));
+             ReflectionUtils.findAllClassesInClasspathRoot(classpathRoot, checkClass(), (name) -> true)
+                            .forEach(clazz -> appendTestInClass(clazz, rootNode));
            });
 
     request.getSelectorsByType(PackageSelector.class)
@@ -72,10 +76,9 @@ public class MicroEngine
 
   private void appendTestInMethod(Method javaMethod, EngineDescriptor rootNode) {
     Class<?> declaringClass = javaMethod.getDeclaringClass();
-    if (checkClass().test(declaringClass))
-      rootNode.addChild(new MicroEngineMethodTestDescriptor(javaMethod,
-                                                            declaringClass,
-                                                            new MicroEngineClassTestDescriptor(declaringClass, rootNode)));
+    if (checkClass().test(declaringClass)) rootNode.addChild(
+        new MicroEngineMethodTestDescriptor(javaMethod, declaringClass,
+                                            new MicroEngineClassTestDescriptor(declaringClass, rootNode)));
   }
 
   private void appendTestInClass(Class<?> javaClass, EngineDescriptor rootNode) {
@@ -93,8 +96,11 @@ public class MicroEngine
 
   @Override
   public void execute(ExecutionRequest request) {
-    TestDescriptor rootNode = request.getRootTestDescriptor();
-    new MicroEngineTestExecutor().execute(request, rootNode);
-
+    TestDescriptor rootNode  = request.getRootTestDescriptor();
+    WeldContainer  container = weld.initialize();
+    new MicroEngineTestExecutor(container).execute(request, rootNode);
+    container.shutdown();
   }
+
+
 }

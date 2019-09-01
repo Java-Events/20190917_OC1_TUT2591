@@ -12,4 +12,19 @@
   <artifactId>2019-oc1-tut2591-01-useless</artifactId>
 
 
+  <dependencies>
+        <dependency>
+          <groupId>org.junit.platform</groupId>
+          <artifactId>junit-platform-launcher</artifactId>
+          <version>${junit.platform.version}</version>
+          <scope>test</scope>
+        </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-testkit</artifactId>
+      <version>${junit.platform.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
 </project>

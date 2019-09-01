@@ -1,5 +1,6 @@
 package org.rapidpm.junit.engine.micro;
 
+import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.platform.commons.util.ReflectionUtils;
 import org.junit.platform.engine.ExecutionRequest;
 import org.junit.platform.engine.TestDescriptor;
@@ -7,8 +8,16 @@ import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.engine.support.descriptor.EngineDescriptor;
 import org.rapidpm.dependencies.core.logger.HasLogger;
 
+import static org.junit.platform.engine.TestExecutionResult.successful;
+
 public class MicroEngineTestExecutor
     implements HasLogger {
+
+  private WeldContainer container;
+
+  public MicroEngineTestExecutor(WeldContainer container) {
+    this.container = container;
+  }
 
   public void execute(ExecutionRequest request, TestDescriptor rootNode) {
     // all could be non-blocking / async
@@ -30,7 +39,7 @@ public class MicroEngineTestExecutor
 
     //waiting to join()?
     request.getEngineExecutionListener()
-           .executionFinished(rootNode, TestExecutionResult.successful());
+           .executionFinished(rootNode, successful());
   }
 
   private void executeMethod(ExecutionRequest request, MicroEngineMethodTestDescriptor descriptor) {
@@ -45,13 +54,21 @@ public class MicroEngineTestExecutor
   private TestExecutionResult executeTestMethod(MicroEngineMethodTestDescriptor descriptor) {
 
     try {
+      Class testClass = descriptor.getTestClass();
+      logger().info("use CDI " + descriptor.useCDI() + " for class " + testClass);
       //TODO CDI for example
+      //TODO get Instance from WELD Container
       //send method name and params over the wire
-      Object newInstance = ReflectionUtils.newInstance(descriptor.getTestClass());
+      Object newInstance = (descriptor.useCDI())
+                           ? container.select(testClass)
+                                      .get()
+                           : ReflectionUtils.newInstance(descriptor.getTestClass());
+
       try {
         //could check result types for more detailed return info
+        //TODO invoke with Method Param Injection from WELD Container
         ReflectionUtils.invokeMethod(descriptor.getTestMethod(), newInstance);
-        return TestExecutionResult.successful();
+        return successful();
       } catch (Exception e) {
         logger().warning(e.getLocalizedMessage());
         return TestExecutionResult.failed(e);

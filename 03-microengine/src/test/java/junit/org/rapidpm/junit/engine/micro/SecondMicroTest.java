@@ -1,22 +1,12 @@
-package junit.org.rapidpm.junit.engine.nano;
+package junit.org.rapidpm.junit.engine.micro;
 
 import org.rapidpm.junit.engine.micro.MicroTest;
 import org.rapidpm.junit.engine.micro.MicroTestClass;
 
 @MicroTestClass
-public class FirstMicroTest {
+public class SecondMicroTest {
 
   @MicroTest
-  void test001_A() {
-
-  }
-
-  @MicroTest
-  void test001_B() {
-
-  }
-
-  //@MicroTest
   void test002() {
 
   }

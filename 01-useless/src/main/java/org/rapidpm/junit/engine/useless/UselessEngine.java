@@ -6,7 +6,8 @@ import org.rapidpm.dependencies.core.logger.HasLogger;
 
 import static org.junit.platform.engine.TestExecutionResult.successful;
 
-public class UselessEngine implements TestEngine, HasLogger {
+public class UselessEngine
+    implements TestEngine, HasLogger {
   @Override
   public String getId() {
     return UselessEngine.class.getSimpleName();
@@ -24,7 +25,7 @@ public class UselessEngine implements TestEngine, HasLogger {
 
   @Override
   public void execute(ExecutionRequest request) {
-    TestDescriptor engine = request.getRootTestDescriptor();
+    TestDescriptor          engine   = request.getRootTestDescriptor();
     EngineExecutionListener listener = request.getEngineExecutionListener();
     listener.executionStarted(engine);
     engine.getChildren()
