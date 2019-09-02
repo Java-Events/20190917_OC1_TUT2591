@@ -14,14 +14,13 @@ import java.util.stream.Collectors;
 
 import static java.lang.System.out;
 
-public class TestEngineRunner {
+public class TestEngineRunner001 {
 
   public static void main(String[] args) {
     LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
                                                                       .build();
     Launcher launcher = LauncherFactory.create();
     TestPlan testPlan = launcher.discover(request);
-
     // Register a listener of your choice
     SummaryGeneratingListener listener = new SummaryGeneratingListener();
     launcher.registerTestExecutionListeners(listener);
@@ -29,7 +28,6 @@ public class TestEngineRunner {
 
     TestExecutionSummary summary = listener.getSummary();
     summary.printTo(new PrintWriter(out));
-
     testPlan.getRoots()
             .stream()
             .filter(TestIdentifier::isContainer)

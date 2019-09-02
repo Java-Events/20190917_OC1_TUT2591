@@ -4,6 +4,9 @@ import org.junit.platform.engine.*;
 import org.junit.platform.engine.support.descriptor.EngineDescriptor;
 import org.rapidpm.dependencies.core.logger.HasLogger;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import static org.junit.platform.engine.TestExecutionResult.successful;
 
 public class UselessEngine
@@ -16,10 +19,7 @@ public class UselessEngine
   @Override
   public TestDescriptor discover(EngineDiscoveryRequest request, UniqueId engineID) {
     EngineDescriptor rootNode = new EngineDescriptor(engineID, "The UselessEngine");
-
-    //will come from somewhere
-    UselessEngineTestDescriptor test001 = new UselessEngineTestDescriptor(engineID, "useless test001");
-    rootNode.addChild(test001);
+    //inject test tree nodes - TestDescriptors
     return rootNode;
   }
 
@@ -32,8 +32,11 @@ public class UselessEngine
           .forEach(child -> {
             listener.executionStarted(child);
             listener.executionFinished(child, successful());
-
           });
     listener.executionFinished(engine, successful());
   }
 }
+
+//will come from somewhere
+//    UselessEngineTestDescriptor test001 = new UselessEngineTestDescriptor(engineID, "useless test001");
+//    rootNode.addChild(test001);
