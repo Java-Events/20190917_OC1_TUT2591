@@ -1,22 +1,22 @@
 package org.rapidpm.junit.engine.nano;
 
+import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.support.descriptor.AbstractTestDescriptor;
 import org.junit.platform.engine.support.descriptor.MethodSource;
 
 import java.lang.reflect.Method;
 
-public class NanoEngineMethodTestDescriptor extends AbstractTestDescriptor {
+public class NanoEngineMethodTestDescriptor
+    extends AbstractTestDescriptor {
 
   private final Method testMethod;
-  private final Class testClass;
+  private final Class  testClass;
 
-  public NanoEngineMethodTestDescriptor(Method testMethod,
-                                        Class testClass,
-                                        NanoEngineClassTestDescriptor parent) {
-    super(parent.getUniqueId().append("method", testMethod.getName()),
+  public NanoEngineMethodTestDescriptor(Method testMethod, Class testClass, UniqueId uniqueId) {
+    super(uniqueId.append("method",
+                          testMethod.getName()),
           testMethod.getName(),
           MethodSource.from(testMethod));
-
     this.testMethod = testMethod;
     this.testClass  = testClass;
   }

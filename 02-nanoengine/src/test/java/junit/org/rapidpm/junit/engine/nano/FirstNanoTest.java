@@ -5,19 +5,12 @@ import org.rapidpm.junit.engine.nano.NanoTestClass;
 
 @NanoTestClass
 public class FirstNanoTest {
+  @NanoTest
+  void test001_A() { }
 
   @NanoTest
-  void test001_A() {
-
-  }
-
-  @NanoTest
-  void test001_B() {
-
-  }
+  void test001_B() { }
 
   //@NanoTest
-  void test002() {
-
-  }
+  void test002() { }
 }

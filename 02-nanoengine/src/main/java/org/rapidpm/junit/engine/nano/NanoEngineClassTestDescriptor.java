@@ -1,14 +1,14 @@
 package org.rapidpm.junit.engine.nano;
 
-import org.junit.platform.commons.support.AnnotationSupport;
 import org.junit.platform.commons.util.ReflectionUtils;
-import org.junit.platform.engine.TestDescriptor;
+import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.support.descriptor.AbstractTestDescriptor;
 import org.junit.platform.engine.support.descriptor.ClassSource;
 import org.rapidpm.dependencies.core.logger.HasLogger;
 
 import java.lang.reflect.Method;
-import java.util.function.Predicate;
+
+import static org.rapidpm.junit.engine.nano.NanoEngine.isTestMethod;
 
 public class NanoEngineClassTestDescriptor
     extends AbstractTestDescriptor
@@ -16,34 +16,23 @@ public class NanoEngineClassTestDescriptor
 
   private final Class<?> testClass;
 
-  public NanoEngineClassTestDescriptor(Class<?> testClass, TestDescriptor parent) {
-    super(parent.getUniqueId()
-                .append("class", testClass.getSimpleName()), testClass.getSimpleName(), ClassSource.from(testClass));
-
+  public NanoEngineClassTestDescriptor(Class<?> testClass, UniqueId uniqueId) {
+    super(uniqueId.append("class",
+                          testClass.getSimpleName()),
+          testClass.getSimpleName(),
+          ClassSource.from(testClass));
     this.testClass = testClass;
-
-    setParent(parent);
     addChildren();
   }
 
   private void addChildren() {
-
-    Predicate<Method> isTestMethod = method -> {
-      if (ReflectionUtils.isStatic(method)) return false;
-      if (ReflectionUtils.isPrivate(method)) return false;
-      if (ReflectionUtils.isAbstract(method)) return false;
-      if (method.getParameterCount() > 0) return false;
-      return AnnotationSupport.isAnnotated(method, NanoTest.class)
-             && method.getReturnType().equals(void.class);
-    };
-
-    ReflectionUtils.findMethods(testClass, isTestMethod)
-                   .stream()
-                   .peek((e) -> logger().info("method in class -> " + e.getName()))
-                   .map(method -> new NanoEngineMethodTestDescriptor(method, testClass, this))
-                   .forEach(this::addChild);
+    ReflectionUtils.findMethods(testClass, isTestMethod())
+                   .forEach(method -> {
+                     final NanoEngineMethodTestDescriptor child = new NanoEngineMethodTestDescriptor(
+                         method, testClass, this.getUniqueId());
+                     addChild(child);
+                   });
   }
-
 
   @Override
   public Type getType() {

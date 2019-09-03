@@ -1,1 +1,2 @@
-org.rapidpm.junit.engine.micro.MicroEngine
+org.rapidpm.junit.engine.nano.NanoEngine
+#org.rapidpm.junit.engine.nano.NanoEngineNG
