@@ -7,12 +7,14 @@ import org.rapidpm.junit.engine.micro.MicroTestClass;
 
 import javax.inject.Inject;
 
-@MicroTestClass
+@MicroTestClass(useCDI = true)
 public class SingletonInjectTest
     implements HasLogger {
 
   @Inject private MyStaticMockedService staticService;
 
+  //How to test that this is created only once?
+  //NO !! This is part of the CDI Implementation - do not test this here
 
   @MicroTest
   void test001() {

@@ -7,7 +7,7 @@ import org.rapidpm.junit.engine.micro.MicroTestClass;
 
 import javax.inject.Inject;
 
-@MicroTestClass
+@MicroTestClass(useCDI = true)
 public class FirstMicroTest {
 
   @Inject
@@ -17,19 +17,4 @@ public class FirstMicroTest {
   void test001_A() {
     Assertions.assertEquals("someWork", service.doSomeWork());
   }
-
-  @MicroTest
-  void test001_B() {
-    Assertions.assertEquals("someWork-FAILED", service.doSomeWork());
-  }
-
-  //@MicroTest
-  void test002() {
-
-  }
-
-
-
-
-
 }

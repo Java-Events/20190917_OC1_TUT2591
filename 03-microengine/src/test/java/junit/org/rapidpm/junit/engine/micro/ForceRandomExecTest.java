@@ -9,6 +9,8 @@ import org.rapidpm.junit.engine.micro.MicroTestClass;
 public class ForceRandomExecTest
     implements HasLogger {
 
+  //Test this with the Testkit !!!
+
   @MicroTest
   void test001() {
     logger().info("test001");

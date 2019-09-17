@@ -10,7 +10,6 @@ import java.lang.annotation.*;
 @Documented
 @Testable
 public @interface MicroTestClass {
-  //params
   boolean forceRandomExecution() default false;
   boolean useCDI() default false;
 }

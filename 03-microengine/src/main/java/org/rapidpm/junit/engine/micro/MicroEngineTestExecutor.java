@@ -4,9 +4,13 @@ import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.platform.commons.util.ReflectionUtils;
 import org.junit.platform.engine.ExecutionRequest;
 import org.junit.platform.engine.TestDescriptor;
+import org.junit.platform.engine.TestEngine;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.engine.support.descriptor.EngineDescriptor;
 import org.rapidpm.dependencies.core.logger.HasLogger;
+
+import java.lang.reflect.Method;
+import java.util.Objects;
 
 import static org.junit.platform.engine.TestExecutionResult.successful;
 
@@ -25,19 +29,14 @@ public class MicroEngineTestExecutor
     if (rootNode instanceof MicroEngineClassTestDescriptor) executeContainer(request, rootNode);
     if (rootNode instanceof MicroEngineMethodTestDescriptor) executeMethod(request,
                                                                            (MicroEngineMethodTestDescriptor) rootNode);
-
     //waiting for join()
   }
 
   private void executeContainer(ExecutionRequest request, TestDescriptor rootNode) {
     request.getEngineExecutionListener()
            .executionStarted(rootNode);
-
-    //concurrent -> CompletableFuture?
     rootNode.getChildren()
             .forEach(c -> execute(request, c));
-
-    //waiting to join()?
     request.getEngineExecutionListener()
            .executionFinished(rootNode, successful());
   }
@@ -50,35 +49,20 @@ public class MicroEngineTestExecutor
            .executionFinished(descriptor, executionResult);
   }
 
-  //concurrent -> CompletableFuture?
+  //TODO invoke with Method Param Injection from WELD Container
   private TestExecutionResult executeTestMethod(MicroEngineMethodTestDescriptor descriptor) {
-
     try {
-      Class testClass = descriptor.getTestClass();
-      logger().info("use CDI " + descriptor.useCDI() + " for class " + testClass);
-      //TODO CDI for example
-      //TODO get Instance from WELD Container
-      //send method name and params over the wire
-      Object newInstance = (descriptor.useCDI())
-                           ? container.select(testClass)
-                                      .get()
-                           : ReflectionUtils.newInstance(descriptor.getTestClass());
-
-      try {
-        //could check result types for more detailed return info
-        //TODO invoke with Method Param Injection from WELD Container
-        ReflectionUtils.invokeMethod(descriptor.getTestMethod(), newInstance);
-        return successful();
-      } catch (Exception e) {
-        logger().warning(e.getLocalizedMessage());
-        return TestExecutionResult.failed(e);
-      }
+      Class<?> testClass = descriptor.getTestClass();
+      Objects.requireNonNull(testClass);
+      Object obj = (descriptor.useCDI())
+                   ? container.select(testClass)
+                              .get()
+                   : ReflectionUtils.newInstance(testClass);
+      final Method testMethod = descriptor.getTestMethod();
+      ReflectionUtils.invokeMethod(testMethod, obj);
+      return successful();
     } catch (Exception e) {
-      String msg = "can  not create instance of " + descriptor.getClass() + " -- " + e.getLocalizedMessage();
-      logger().warning(msg);
-      return TestExecutionResult.failed(new RuntimeException(msg, e));
+      return TestExecutionResult.failed(new RuntimeException(e));
     }
   }
-
-
 }

@@ -1,5 +1,6 @@
 package org.rapidpm.junit.engine.micro;
 
+import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.support.descriptor.AbstractTestDescriptor;
 import org.junit.platform.engine.support.descriptor.MethodSource;
 
@@ -16,8 +17,8 @@ public class MicroEngineMethodTestDescriptor
   private Boolean forceRandomExecution = false;
   private Boolean useCDI               = false;
 
-  public MicroEngineMethodTestDescriptor(Method testMethod, Class testClass, MicroEngineClassTestDescriptor parent) {
-    super(parent.getUniqueId()
+  public MicroEngineMethodTestDescriptor(Method testMethod, Class testClass, UniqueId uniqueId) {
+    super(uniqueId
                 .append("method", testMethod.getName()), testMethod.getName(), MethodSource.from(testMethod));
 
     this.testMethod = testMethod;
